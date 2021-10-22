@@ -108,3 +108,11 @@ export function getNormalMergeRV2(arr = []) {
     return { component, coord: [x, y] };
   });
 }
+
+function reduce(fn, acc, array, l) {
+  if (array.length === 0) {
+    return acc;
+  }
+
+  return reduce(fn, fn(acc, array[0], array, l), array.slice(1), l);
+}

@@ -12,160 +12,6 @@ import {
 } from './helpers';
 
 export default ({ name }) => {
-  const areas = '"A B B" "A C ." "D . ."';
-
-  const config = [
-    [<Mock text={'A'} />, <Mock text={'B'} />, <Mock text={'B'} />],
-    [<Mock text={'A'} />, <Mock text={'C'} />],
-    [<Mock text={'D'} />],
-  ];
-
-  const c = [
-    [
-      [<Mock text={''} />, 'single'],
-      [<Mock text={''} />, 'single'],
-      [<Mock text={''} />, 'merge-c'],
-    ],
-    [
-      [<Mock text={''} />, 'single'],
-      [<Mock text={''} />, 'single'],
-      [<Mock text={''} />, 'merge-c'],
-    ],
-    [
-      [<Mock text={''} />, 'empty'],
-      [<Mock text={''} />, 'merge-r'],
-      [<Mock text={''} />, 'merge-r'],
-    ],
-  ];
-
-  // const list2 = c.map((el, i) => {
-  //   return el.map((ell, ii) => {
-  //     return `r${i}-c${ii}`;
-  //   });
-  // });
-  // console.log(list2);
-
-  const asd = [
-    [<Mock text={''} />, 'single'],
-    [<Mock text={''} />, 'single'],
-    [<Mock text={''} />, 'merge-c'],
-  ];
-
-  const asd2 = [
-    [<Mock text={''} />, 'merge-r'],
-    [<Mock text={''} />, 'merge-r'],
-    [<Mock text={''} />, 'empty'],
-  ];
-
-  function reduce(fn, acc, array, l) {
-    if (array.length === 0) {
-      return acc;
-    }
-
-    return reduce(fn, fn(acc, array[0], array, l), array.slice(1), l);
-  }
-
-  const start = 0;
-
-  const someFn = (acc, el, arr, l) => {
-    // console.log(acc, el, arr, l, `r${start}-c${l - arr.length}`);
-    const [component, type] = el;
-    if (type === 'merge-r') {
-    }
-
-    return acc;
-  };
-
-  // console.log('reduce ===>', reduce(someFn, [], asd2, asd2.length));
-
-  const objN = c.reduce(
-    (acc, el, i) => {
-      const arr = el.reduce((accc, ell, ii) => {
-        const [component, type] = ell;
-        const item = `r${i}-c${ii}`;
-
-        if (type === 'single') {
-          accc.push({
-            comp: <Block area={item}>{component}</Block>,
-            area: item,
-          });
-        }
-
-        if (type === 'empty') {
-          accc.push({
-            comp: null,
-            area: '.',
-          });
-        }
-
-        return accc;
-      }, []);
-
-      acc.buffer.push(arr);
-
-      return acc;
-    },
-    {
-      list: [],
-      areas: [],
-      buffer: [],
-    }
-  );
-
-  // console.log('objN', objN);
-
-  const obj = {
-    listN: [
-      <Block area={'A'}>
-        <Mock text={'A'} />
-      </Block>,
-      <Block area={'B'}>
-        <Mock text={'B'} />
-      </Block>,
-      <Block area={'C'}>
-        <Mock text={'C'} />
-      </Block>,
-      <Block area={'D'}>
-        <Mock text={'D'} />
-      </Block>,
-    ],
-    areasN: '"A B B" "A C ." ". D D"',
-  };
-
-  const { listN, areasN } = obj;
-
-  const list = ['A', 'B', 'C', 'D'].map((el) => (
-    <Block area={el}>
-      <Mock text={'q'} />
-    </Block>
-  ));
-
-  const l = [
-    [
-      <Block area={'1 / 1 / 1 / 2'} key={'A'}>
-        <Mock text={'AA'} />
-      </Block>,
-      <Block area={'B'} key={'B'}>
-        <Mock text={'BB'} />
-      </Block>,
-      null,
-    ],
-    [
-      <Block area={'C'} key={'C'}>
-        <Mock text={'CC'} />
-      </Block>,
-      null,
-      null,
-    ],
-    [
-      <Block area={'D'} key={'D'}>
-        <Mock text={'DD'} />
-      </Block>,
-      null,
-      null,
-    ],
-  ];
-
   const arr1 = [
     [
       [<Mock text={''} />, 'single'],
@@ -212,7 +58,6 @@ export default ({ name }) => {
   // const buffer1 = getCollection(arr1);
   const { defaultCountRows, defaultCountColumns, collection } =
     getCollection(arr2);
-  console.log('buffer1 ===>', collection);
 
   const getTemplateComponents = (arr) => {
     return arr.map((el) => {
@@ -237,10 +82,35 @@ export default ({ name }) => {
     getNormalMergeRV2(collection['merge-r'])
   );
 
-  // , ...mergeCList, ...mergeRList
+  //
+  const {
+    defaultCountRows: cr1,
+    defaultCountColumns: cc1,
+    collection: c1,
+  } = getCollection(arr1);
+
+  const singleList1 = getTemplateComponents(getNormalSingleV2(c1['single']));
+  const mergeCList1 = getTemplateComponents(getNormalMergeCV2(c1['merge-c']));
+  const mergeRList1 = getTemplateComponents(getNormalMergeRV2(c1['merge-r']));
+
+  const {
+    defaultCountRows: cr2,
+    defaultCountColumns: cc2,
+    collection: c2,
+  } = getCollection(arr2);
+  const singleList2 = getTemplateComponents(getNormalSingleV2(c2['single']));
+
   return (
-    <Container columns={defaultCountColumns} rows={defaultCountRows}>
-      {[...singleList]}
-    </Container>
+    <div>
+      <Container columns={cc1} rows={cr1}>
+        {[...singleList1, ...mergeCList1, ...mergeRList1]}
+      </Container>
+      <br />
+      <br />
+      <br />
+      <Container columns={cc2} rows={cr2}>
+        {[...singleList2]}
+      </Container>
+    </div>
   );
 };
