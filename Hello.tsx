@@ -55,10 +55,6 @@ export default ({ name }) => {
     ],
   ];
 
-  // const buffer1 = getCollection(arr1);
-  const { defaultCountRows, defaultCountColumns, collection } =
-    getCollection(arr2);
-
   const getTemplateComponents = (arr) => {
     return arr.map((el) => {
       const { component, coord, factor } = el;
@@ -72,17 +68,6 @@ export default ({ name }) => {
     });
   };
 
-  const singleList = getTemplateComponents(
-    getNormalSingleV2(collection['single'])
-  );
-  const mergeCList = getTemplateComponents(
-    getNormalMergeCV2(collection['merge-c'])
-  );
-  const mergeRList = getTemplateComponents(
-    getNormalMergeRV2(collection['merge-r'])
-  );
-
-  //
   const {
     defaultCountRows: cr1,
     defaultCountColumns: cc1,
